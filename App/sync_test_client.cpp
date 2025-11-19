@@ -11,13 +11,14 @@
 #include <numeric>
 #include <algorithm>
 #include <cstdlib>
-#include <sstream>
 #include <filesystem>
 
 #define GPIO_CHIP "/dev/gpiochip4"
 #define GPIO_OUTPUT 17
 
 #define ITERATIONS 20 // Adjust to number of iteration wanted
+#define SLEEP_S 0
+#define SLEEP_NS 500000000
 
 std::vector<double> table_offset;
 std::vector<double> table_jitter;
@@ -87,7 +88,7 @@ double extractTimestamp(const std::string& dmesgLine) {
 }
 
 // Compare timestamps and register store them
-int checkSynchronisation(int &n_meas, double &trigger)
+int checkSynchronisation(int &n_meas)
 {
     // Extract local timestamps
     std::string response = getLatestDmesgLine();
@@ -128,10 +129,9 @@ void getMinMaxFromTable(std::vector<double> &table, std::string table_name)
 
 int main() {
     struct timespec sleep_time;
-    double hour_time = 0L;
+    double start_time = 0L;
     int pin_value = 1;
     int i = ITERATIONS;
-    double P_pred = 1000000000000.0;
 
     // Access gpio chip
     struct gpiod_chip *chip = gpiod_chip_open(GPIO_CHIP);
@@ -165,16 +165,14 @@ int main() {
         std::cout << "Reaquest GPIO 17 line\n";
     }
 
-    sleep_time.tv_sec = 0;
-    sleep_time.tv_nsec = 500000000;
-    std::cout << "Initiate Timestamps" << std::endl;
-    hour_time = get_time_ns(CLOCK_REALTIME);
-    std::cout << "hour_time: " << hour_time <<std::endl;
+    sleep_time.tv_sec = SLEEP_S;
+    sleep_time.tv_nsec = SLEEP_NS;
+    std::cout << "Initiate code start time" << std::endl;
+    start_time = get_time_ns(CLOCK_REALTIME);
     int count_ones = 0;
     int count_zeros = 0;
     int meas = 0;
     mem_offset = 0L;
-    double trigger_time = 0;
     while (i) {
         double time_ns = get_time_ns(CLOCK_REALTIME);
         std::cout << "time_ns: " << time_ns <<std::endl;
@@ -185,7 +183,6 @@ int main() {
 
         if(pin_value == 0)
         {
-            trigger_time = time_ns;
             count_zeros++;
             printf("Measurement %d: Pin value = %d; Time = %f ns\n", meas, pin_value, time_ns);
             mono_table.push_back(time_ns);
@@ -194,7 +191,7 @@ int main() {
         else if (pin_value == 1 && i < ITERATIONS)
         {
             count_ones++;
-            int ret = checkSynchronisation(meas, trigger_time);
+            int ret = checkSynchronisation(meas);
             if(ret)
             {
                 std::cerr << "An issue occured in synchronisation - check logs\n";
@@ -212,21 +209,20 @@ int main() {
     // check last iteration timestamps
     if(count_ones < count_zeros)
     {
-        int ret = checkSynchronisation(meas, trigger_time);
+        int ret = checkSynchronisation(meas);
         if(ret)
         {
             std::cerr << "An issue occured in synchronisation - check logs\n";
             return 1;
         }
     }
-    // First jitter is from init to first offset so it is not relevant
+    // First jitter is from init to first offset so it is not relevant for average 
     auto first_jitter = table_jitter.begin()+1;
-    std::string build = "co_ref";
     auto first_offset = table_offset.begin();
     double end_time = mono_table.back();
     printf("end time = %f ns\n", end_time);
-    printf("start time = %f ns\n", hour_time);
-    double final_time = end_time - hour_time;
+    printf("start time = %f ns\n", start_time);
+    double final_time = end_time - start_time;
     double meas_time = static_cast<double>(final_time) / 1000000000.0;
     printf("Measurement Time : %.4f s\n", meas_time);
 
@@ -261,10 +257,10 @@ int main() {
     }
 
     // Export results into a csv
-    int step = 500;
+    int step = SLEEP_NS/1000000;
     int duration = static_cast<int>(meas_time);
-    std::string path = "/home/francois.provost/latency_test/test_results/";
-    std::string baseFilename = path + "synchronisation_test_" + build+ "_" + 
+    std::string path = "";
+    std::string baseFilename = path + "synchronisation_test_" + 
                                std::to_string(duration) + "s_" + 
                                std::to_string(step) + "ms";
 
@@ -293,7 +289,7 @@ int main() {
         file << (i < table_offset.size() ? std::to_string(table_offset[i]) : "") << ",";
         file << (i < table_jitter.size() ? std::to_string(table_jitter[i]) : "") << ",";
         file << "" << ",";
-        file << (i < mono_table.size() ? std::to_string((mono_table[i]-hour_time)/1e9f): "") << ",";
+        file << (i < mono_table.size() ? std::to_string((mono_table[i]-start_time)/1e9f): "") << ",";
         file << (i < table_offset.size() ? std::to_string((abs(table_offset[i])/1e6f)) : "") << ",";
         file << (i < table_jitter.size() ? std::to_string((abs(table_jitter[i])/1e6f)) : "") << "\n";
     }

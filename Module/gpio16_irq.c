@@ -6,12 +6,6 @@
 #include <linux/interrupt.h>
 #include <linux/kernel.h>
 #include <linux/ktime.h>
-#include <linux/kobject.h>
-#include <linux/sysfs.h>
-#include <linux/uaccess.h>
-#include <linux/kfifo.h>
-#include <linux/proc_fs.h>
-#include <linux/seq_file.h>
 
 static struct gpio_desc *gpio_desc_irq;
 static int irq_number;
