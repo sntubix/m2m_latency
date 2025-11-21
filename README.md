@@ -10,6 +10,9 @@ The system includes:
 
 This README provides everything needed to install, configure, and run the full system.
 
+### Abreviations
+- RPI : Raspberry Pi
+
 ---
 
 # 1. Repository Structure
@@ -103,7 +106,7 @@ This README provides everything needed to install, configure, and run the full s
   ssh pi_user_name@Pi_ip_dddress
   ```
 
-- **Note: Computer and RPI should be on the same network**
+- **Note: Computer and [RPI](#abreviations) should be on the same network**
 
 ---
 
@@ -406,7 +409,7 @@ This configures your gpio descriptor used in C module
 ## 5.6. Ouput data
 Provide a csv containing
 - Timestamps separated into two column, seconds and remaining nanoseconds
-- Each export must be done on each RPI, then regroup the data
+- Each export must be done on each [RPI](#abreviations), then regroup the data
 
 ---
 
@@ -465,7 +468,7 @@ Provide a csv containing
 ## 6.5. Notes
  - **sudo taskset -c 3 chrt -f 99** launch programs at maxmium priority on core 3. It is needed for the GPIO to be set as fast as possible
  - **sync_test_server** must be run before **sync_test_client**
- - [WinSCP](https://winscp.net/eng/download.php) was used to transfert files between computer and RPI devices
+ - [WinSCP](https://winscp.net/eng/download.php) was used to transfert files between computer and [RPI](#abreviations) devices
 
 ---
 
@@ -473,12 +476,10 @@ Provide a csv containing
 
 ---
 
-To test system for Motion-to-Motion latency:
+To test system for Motion-to-Motion latency, on each [RPI](#abreviations):
 
 - [Build and load dts and kernel module](#install-system)
-- Connect Hall-effect sensor signal output to GPIO 16, via a 1kΩ  resistor to protect the GPIO
-- Connect 3.3V power pin and GND to sensor Vcc and GND
-- Add a pull-up resistor (1kΩ) between Vcc and Output signal, this will ensure the GPIO is set to HIGH when no magnet is detected
+- Connect Hall-effect sensor, Sensor_1 and Sensor_2 in schematic, to [RPI](#abreviations) pins
 
 ![alt text](images/schematic_sensor.png)
 
