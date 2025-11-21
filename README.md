@@ -111,7 +111,7 @@ This README provides everything needed to install, configure, and run the full s
 
 ---
 
-- Installing the required system packages :
+- Install the required system packages :
   ```bash
   sudo apt install build-essential libgpiod-dev rt-tests linux-tools-common linux-tools-$(uname -r) wireless-tools gpiod chrony network-manager linux-headers-$(uname -r)
   ```
@@ -293,7 +293,7 @@ This configures your gpio descriptor used in C module
   ```
 
 ## 5.3. Modify interrupt trigger
-### In gpio16_irq.dts, change the trigger type
+### Update trigger type in DTS
   > interrupts = <16 2>;
 
   > interrupts = <gpio_num trigger_type>;
@@ -334,7 +334,7 @@ This configures your gpio descriptor used in C module
   </tr>
   </table>
 
-### Modify the flag in gpio16_irq.c
+### Update trigger type in C module
 
   ![alt text](images/irq_flag_module.png)
 
@@ -365,10 +365,10 @@ This configures your gpio descriptor used in C module
   ### For multiple trigger use the notation "FLAG1 | FLAG2 | ..." 
   ![alt text](images/both_edges.png)
 
-### Rebuild [see](#build-and-load-dts-file)
+### [Rebuild](#build-and-load-dts-file)
 
-## Note: To modify GPIO used as interrupt
-### Changes in DTS 
+**Note: To modify GPIO used as interrupt in DTS files:**
+
 - interrupts = <gpio_num trigger_type>;
 - gpio-irq-gpios = <&gpio gpio_num trigger_type>;
 - if **GPIO_16_IRQ:** is modified in module, it mush must modifed everywhere else (cpp apps and export.sh)
