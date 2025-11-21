@@ -465,7 +465,7 @@ Provide a csv containing
 ## 6.5. Notes
  - **sudo taskset -c 3 chrt -f 99** launch programms at maxmium priority on core 3. It is needed for the GPIO to be set as fast as possible
  - **sync_test_server** must be run before **sync_test_client**
- - [WinSCP](https://winscp.net/eng/download.php) was to transfert files between computer and RPI devices
+ - [WinSCP](https://winscp.net/eng/download.php) was used to transfert files between computer and RPI devices
 
 ---
 
