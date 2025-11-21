@@ -160,7 +160,7 @@ This README provides everything needed to install, configure, and run the full s
   ```
   ![alt text](images/default_chrony.png)
 
-  minpoll and maxpoll specify the range for update interval. 2-> 2^2 = 4 seconds
+  - **minpoll** and **maxpoll** specify the range for update interval. 2-> 2^2 = 4 seconds
 
 ## 4.1. Configure for co-reference mode
 - **RPI-Ref** = Raspberry Pi used as reference
@@ -175,9 +175,9 @@ This README provides everything needed to install, configure, and run the full s
 
   ![alt text](images/chrony_allow.png)
 
-- Restart Chrony to apply changes [see](#restart-chrony)
+- [Restart Chrony to apply changes](#restart-chrony)
 
-- Check Chrony sources and tracking status [see](#check-chrony-sources)
+- [Check Chrony sources and tracking status](#check-chrony-sources)
 
 
 ### On RPI-Peer
@@ -189,9 +189,9 @@ This README provides everything needed to install, configure, and run the full s
 
   ![alt text](images/Chrony_server_source.png)
 
-- Restart Chrony to apply changes [see](#restart-chrony)
+- [Restart Chrony to apply changes](#restart-chrony)
 
-- Check Chrony sources and tracking status [see](#check-chrony-sources)
+- [Check Chrony sources and tracking status](#check-chrony-sources)
 
 
 ## 4.2 Attach Chrony to a particular core
@@ -256,6 +256,7 @@ This configures your gpio descriptor used in C module
 
 ## 5.2. Build and load kernel module
 - [In Module folder](#1-repository-structure)
+### Build module
   ```bash
   make clean && make
   ```
@@ -286,11 +287,10 @@ This configures your gpio descriptor used in C module
   ![alt text](images/gpioinfo.png)
 
 - **DO NOT REBOOT OR MODULE WILL UNLOADED**
-
-### Unload manually
-  ```bash
-  sudo rmmod gpio16_irq
-  ```
+  - Unload manually
+    ```bash
+    sudo rmmod gpio16_irq
+    ```
 
 ## 5.3. Modify interrupt trigger
 ### Update trigger type in DTS
@@ -367,7 +367,7 @@ This configures your gpio descriptor used in C module
 
 ### [Rebuild](#build-and-load-dts-file)
 
-**Note: To modify GPIO used as interrupt in DTS files:**
+**Note: To modify GPIO used as interrupt, in DTS files:**
 
 - interrupts = <gpio_num trigger_type>;
 - gpio-irq-gpios = <&gpio gpio_num trigger_type>;
@@ -417,14 +417,16 @@ Provide a csv containing
 
 - [In App folder](#1-repository-structure)
 
-Application is separated into sync_test_client and sync_test_server, each must be launch in one of the RPI
+The full application is separated into sync_test_client and sync_test_server, each must be launched in one of the RPI
 - **RPI-Client** = Raspberry Pi launching sync_test_client.cpp
 - **RPI-Server** = Raspberry Pi launching sync_test_server.cpp
 
 ## 6.1. Hardware
 
-- On RPI-Client connect GPIO 17 to its own and RPI-Server GPIO-16 each via a 1kΩ resitor.
+- On RPI-Client, connect GPIO 17 to its own and RPI-Server GPIO-16 each via a 1kΩ resitor.
 - Connect RPI-Client and RPI-Server GND pins.
+
+![alt text](images/sync_schematic.png)
 
 ## 6.2. CLient side
 ### Build and run 
@@ -477,6 +479,8 @@ To test system functionnality for Motion-to-Mtion latency:
 - Connect Hall-effect sensor signal output to GPIO 16, via a 1kΩ  resistor to protect the GPIO
 - Connect 3.3V power pin and GND to sensor Vcc and GND
 - Add a pull-up resistor between Vcc and Output signal, this will ensure the GPIO is set to HIGH when no magnet is detected
+
+![alt text](images/schematic_sensor.png)
 
 You can now try to put magnets in front of both sensors and [check interrupts in real-time](#54-read-interrupt-events-logs)
 
