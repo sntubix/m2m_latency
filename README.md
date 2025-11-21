@@ -13,6 +13,7 @@ This README provides everything needed to install, configure, and run the full s
 ### Abreviations
 - RPI : Raspberry Pi
 - GPIO : General Purpose Input Output
+- V2X : Vehicle to everything
 
 ---
 
