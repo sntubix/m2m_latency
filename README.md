@@ -12,6 +12,7 @@ This README provides everything needed to install, configure, and run the full s
 
 ### Abreviations
 - RPI : Raspberry Pi
+- GPIO : General Purpose Input Output
 
 ---
 
@@ -106,7 +107,7 @@ This README provides everything needed to install, configure, and run the full s
   ssh pi_user_name@Pi_ip_dddress
   ```
 
-- **Note: Computer and [RPI](#abreviations) should be on the same network**
+- **Note: Computer and RPI should be on the same network**
 
 ---
 
@@ -234,7 +235,7 @@ This README provides everything needed to install, configure, and run the full s
 ## 5.1. Add device tree overlays for GPIO
 - [In Module folder](#1-repository-structure)
 
-### Build and load dts file
+### Build and load gpio16_irq.dts
 This configures your gpio descriptor used in C module
 
   ```bash
@@ -296,7 +297,7 @@ This configures your gpio descriptor used in C module
     ```
 
 ## 5.3. Modify interrupt trigger
-### Update trigger type in DTS
+### Update trigger type in gpio16_irq.dts
   > interrupts = <16 2>;
 
   > interrupts = <gpio_num trigger_type>;
@@ -370,7 +371,7 @@ This configures your gpio descriptor used in C module
 
 ### [Rebuild](#build-and-load-dts-file)
 
-**Note: To modify GPIO used as interrupt, in DTS files:**
+**Note: To modify GPIO used as interrupt, in gpio16_irq.dts:**
 
 - interrupts = <gpio_num trigger_type>;
 - gpio-irq-gpios = <&gpio gpio_num trigger_type>;
@@ -409,7 +410,7 @@ This configures your gpio descriptor used in C module
 ## 5.6. Ouput data
 Provide a csv containing
 - Timestamps separated into two column, seconds and remaining nanoseconds
-- Each export must be done on each [RPI](#abreviations), then regroup the data
+- Each export must be done on each RPI, then regroup the data
 
 ---
 
@@ -468,7 +469,7 @@ Provide a csv containing
 ## 6.5. Notes
  - **sudo taskset -c 3 chrt -f 99** launch programs at maxmium priority on core 3. It is needed for the GPIO to be set as fast as possible
  - **sync_test_server** must be run before **sync_test_client**
- - [WinSCP](https://winscp.net/eng/download.php) was used to transfert files between computer and [RPI](#abreviations) devices
+ - [WinSCP](https://winscp.net/eng/download.php) was used to transfert files between computer and RPI devices
 
 ---
 
@@ -476,10 +477,10 @@ Provide a csv containing
 
 ---
 
-To test system for Motion-to-Motion latency, on each [RPI](#abreviations):
+To test system for Motion-to-Motion latency, on each RPI:
 
 - [Build and load dts and kernel module](#install-system)
-- Connect Hall-effect sensor, Sensor_1 and Sensor_2 in schematic, to [RPI](#abreviations) pins
+- Connect Hall-effect sensor, Sensor_1 and Sensor_2 in schematic, to RPI pins
 
 ![alt text](images/schematic_sensor.png)
 
