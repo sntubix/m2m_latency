@@ -463,7 +463,7 @@ Provide a csv containing
 - GPIO trigger time (set to LOW) in nanoseconds and converted to seconds starting from 0
 
 ## 6.5. Notes
- - **sudo taskset -c 3 chrt -f 99** launch programms at maxmium priority on core 3. It is needed for the GPIO to be set as fast as possible
+ - **sudo taskset -c 3 chrt -f 99** launch programs at maxmium priority on core 3. It is needed for the GPIO to be set as fast as possible
  - **sync_test_server** must be run before **sync_test_client**
  - [WinSCP](https://winscp.net/eng/download.php) was used to transfert files between computer and RPI devices
 
@@ -473,12 +473,12 @@ Provide a csv containing
 
 ---
 
-To test system functionnality for Motion-to-Mtion latency:
+To test system for Motion-to-Motion latency:
 
 - [Build and load dts and kernel module](#install-system)
 - Connect Hall-effect sensor signal output to GPIO 16, via a 1kΩ  resistor to protect the GPIO
 - Connect 3.3V power pin and GND to sensor Vcc and GND
-- Add a pull-up resistor between Vcc and Output signal, this will ensure the GPIO is set to HIGH when no magnet is detected
+- Add a pull-up resistor (1kΩ) between Vcc and Output signal, this will ensure the GPIO is set to HIGH when no magnet is detected
 
 ![alt text](images/schematic_sensor.png)
 
