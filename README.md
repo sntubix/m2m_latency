@@ -10,7 +10,7 @@ The system includes:
 
 This README provides everything needed to install, configure, and run the full system.
 
-### Abreviations
+### Abbreviations
 - RPI : Raspberry Pi
 - GPIO : General Purpose Input Output
 - V2X : Vehicle to everything
@@ -105,7 +105,7 @@ This README provides everything needed to install, configure, and run the full s
 - Use IP and user name for remote access
 
   ```bash
-  ssh pi_user_name@Pi_ip_dddress
+  ssh pi_user_name@Pi_ip_address
   ```
 
 - **Note: Computer and RPI should be on the same network**
@@ -245,7 +245,7 @@ This configures your gpio descriptor used in C module
   ```
   Note:
   ```bash
-  sudo rm /boot/firmware/overlays/gpio16_irq.dtbo # Unload 
+  sudo rm /boot/firmware/overlays/gpio16_irq.dtbo # Prevents overlay load at boot time 
   ```
 
 ### Add overlay to boot config file
@@ -376,11 +376,11 @@ This configures your gpio descriptor used in C module
 
 - interrupts = <gpio_num trigger_type>;
 - gpio-irq-gpios = <&gpio gpio_num trigger_type>;
-- if **GPIO_16_IRQ:** is modified in module, it mush must modifed everywhere else (cpp apps and export.sh)
+- if **GPIO_16_IRQ:** is modified in module, it must be modifed everywhere else (cpp apps and export.sh)
 
 ## 5.4. Read interrupt events logs
-### Acces the ring buffer
-- Timestamps are looged into the ring buffer
+### Access the ring buffer
+- Timestamps are logged into the ring buffer
   ```bash
   sudo dmesg
   ```
@@ -402,13 +402,13 @@ This configures your gpio descriptor used in C module
   ```bash
   bash export.sh "gpio number" "name"
   ```
-  Exemple:
+  Example:
   ```bash
   bash export.sh 16 vehicle_event
   ```
   - **Important: If ring buffer was not cleared every experiment will be mixed together into the same csv**
 
-## 5.6. Ouput data
+## 5.6. Output data
 Provide a csv containing
 - Timestamps separated into two column, seconds and remaining nanoseconds
 - Each export must be done on each RPI, then regroup the data
@@ -428,12 +428,12 @@ The full application is separated into sync_test_client and sync_test_server, ea
 
 ## 6.1. Hardware
 
-- On RPI-Client, connect GPIO 17 to its own and RPI-Server GPIO-16 each via a 1kΩ resitor.
+- Connect RPI-Client GPIO-17 to its own GPIO-16 and RPI-Server GPIO-16 each via a 1kΩ resistor.
 - Connect RPI-Client and RPI-Server GND pins.
 
 ![alt text](images/sync_schematic.png)
 
-## 6.2. CLient side
+## 6.2. Client side
 ### Build and run 
   ```bash
   g++ -o sync_test_client sync_test_client.cpp -lgpiod
@@ -468,9 +468,9 @@ Provide a csv containing
 - GPIO trigger time (set to LOW) in nanoseconds and converted to seconds starting from 0
 
 ## 6.5. Notes
- - **sudo taskset -c 3 chrt -f 99** launch programs at maxmium priority on core 3. It is needed for the GPIO to be set as fast as possible
+ - **sudo taskset -c 3 chrt -f 99** launch programs at maximum priority on core 3. It is needed for the GPIO to be set as fast as possible
  - **sync_test_server** must be run before **sync_test_client**
- - [WinSCP](https://winscp.net/eng/download.php) was used to transfert files between computer and RPI devices
+ - [WinSCP](https://winscp.net/eng/download.php) was used to transfer files between computer and RPI devices
 
 ---
 
